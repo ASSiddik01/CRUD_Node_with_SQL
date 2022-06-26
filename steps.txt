@@ -1,0 +1,26 @@
+Client
+==========
+create react app - npx create-react-app crud_node_mysql
+install and configure tailwind - https://tailwindcss.com/docs/guides/create-react-app
+    npm install -D tailwindcss postcss autoprefixer
+    npx tailwindcss init -p
+
+
+
+
+
+
+
+Server
+==========
+
+
+
+
+
+MySQL
+==========
+run apache
+create db - db_name and unicode ci
+create table - table name and rows
+set row name and type, Id auto implement, length 255

@@ -5,6 +5,8 @@ install and configure tailwind - https://tailwindcss.com/docs/guides/create-reac
     npm install -D tailwindcss postcss autoprefixer
     npx tailwindcss init -p
 
+design front end
+
 
 
 

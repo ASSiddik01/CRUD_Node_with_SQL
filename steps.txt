@@ -10,11 +10,60 @@ design front end
 
 
 
-
-
-
 Server
 ==========
+initialiaze server - npm init -y
+write script in server - 
+    "start": "node index.js",
+    "start-dev": "nodemon index.js",
+
+install cors, express, mysql, dotenv - npm i cors express mysql dotenv
+create .gitignore and write ignore_file_name:
+    node_modules
+    .env
+create .env and save DB_secrets
+create index.js
+require those file:
+    const express = require("express");
+    const app = express();
+    const mysql = require("mysql");
+    const cors = require("cors");
+    require("dotenv").config();
+
+
+Use Middle ware: 
+    app.use(cors());
+    app.use(express.json());
+
+Port decleare: 
+    const port = process.env.PORT || 5000;
+
+Create DB Configuration:
+    var db = mysql.createConnection({
+    host: process.env.DB_host,
+    user: process.env.DB_user,
+    password: process.env.DB_password,
+    database: process.env.DB_database,
+    });
+
+DB Connection check:
+    db.connect(function (error) {
+    if (error) {
+        console.log("Failed");
+    } else {
+        console.log("Success");
+    }
+    });
+
+Server Check:
+    app.get("/", (req, res) => {
+    res.send("Node MySQL server running");
+    });
+
+Port check:
+    app.listen(port, () => {
+    console.log(`CRUD node mysql running ${port} port`);
+    });
 
 
 

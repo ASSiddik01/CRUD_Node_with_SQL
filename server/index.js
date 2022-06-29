@@ -28,6 +28,66 @@ db.connect(function (error) {
   }
 });
 
+// post api
+app.post("/post", (req, res) => {
+  const todo = "test todo 4";
+  const priority = "high";
+
+  db.query(
+    "INSERT INTO `todo`(`task`, `priority`) VALUES (?,?)",
+    [todo, priority],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send("result");
+      }
+    }
+  );
+});
+
+// Get api
+app.get("/get", (req, res) => {
+  db.query("SELECT * FROM `todo` WHERE 1", (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
+// delete api
+app.delete("/delete/:id", (req, res) => {
+  const id = req.params.id;
+  console.log(id);
+  db.query("DELETE FROM `todo` WHERE id=?", id, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
+// update api
+app.put("/update", (req, res) => {
+  const id = req.body.id;
+  const priority = req.body.priority;
+  console.log(id);
+  db.query(
+    "UPDATE `todo` SET `priority`= ? WHERE id= ?",
+    [priority, id],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
 // Server Check
 app.get("/", (req, res) => {
   res.send("Node MySQL server running");

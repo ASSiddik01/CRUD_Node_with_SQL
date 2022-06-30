@@ -73,7 +73,6 @@ app.delete("/delete/:id", (req, res) => {
 app.put("/update", (req, res) => {
   const id = req.body.id;
   const priority = req.body.priority;
-  console.log(id);
   db.query(
     "UPDATE `todo` SET `priority`= ? WHERE id= ?",
     [priority, id],

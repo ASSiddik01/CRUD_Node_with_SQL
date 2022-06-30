@@ -4,6 +4,7 @@ import { useQuery } from "react-query";
 
 function App() {
   const [inputEdit, setInputEdit] = useState(false);
+  const [priroity, setPriroity] = useState();
   const apiURL = "http://localhost:5000";
   const {
     data: todos,
@@ -34,9 +35,9 @@ function App() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         if (data.insertId) {
           alert(`Add todo`);
+          refetch();
         } else {
           alert(`Not add`);
         }
@@ -45,7 +46,6 @@ function App() {
     // Clear
     e.target.taskName.value = "";
     e.target.taskPriroity.value = "";
-    refetch();
   };
 
   // Delete data
@@ -55,7 +55,6 @@ function App() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         if (data.protocol41) {
           alert(`Todo is deleted.`);
           refetch();
@@ -63,12 +62,31 @@ function App() {
       });
   };
 
-  const handleEdit = (e) => {
-    e.preventDefault();
-    const editPriroity = e.target.editPriroity.value;
-    console.log(editPriroity);
+  // Update data
+  const handleEdit = (id) => {
+    const todo = {
+      id: id,
+      priority: priroity,
+    };
+    // Send to DB
+    fetch(`${apiURL}/update`, {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(todo),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.insertId) {
+          alert(`Add todo`);
+          refetch();
+        } else {
+          alert(`Not add`);
+        }
+      });
 
-    e.target.editPriroity.value = "";
+    setInputEdit(false);
   };
   return (
     <div className="App">
@@ -121,29 +139,30 @@ function App() {
                   </div>
                   <hr className="border-t-2 border-t-lime-400 my-2" />
                   <div className="space-x-4">
-                    <form
-                      onSubmit={handleEdit}
+                    <div
                       className={`${inputEdit ? "block" : "hidden"} space-x-4`}
                     >
                       <input
+                        onChange={(e) => setPriroity(e.target.value)}
                         type="text"
                         placeholder="Update priroity "
                         className="border border-gray-500 rounded"
                         name="editPriroity"
                         id="editPriroity"
                       />
-                      <input
-                        type="submit"
-                        value={"Update"}
+                      <button
+                        onClick={() => handleEdit(todo.id)}
                         className="btn btn-primary px-4 py-1 rounded bg-green-500"
-                      ></input>
+                      >
+                        Update
+                      </button>
                       <button
                         onClick={() => setInputEdit(false)}
                         className="btn btn-primary px-4 py-1 rounded bg-red-600"
                       >
                         Cancel
                       </button>
-                    </form>
+                    </div>
 
                     <button
                       onClick={() => setInputEdit(true)}

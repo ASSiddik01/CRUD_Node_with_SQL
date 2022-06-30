@@ -4,18 +4,18 @@ import { useQuery } from "react-query";
 
 function App() {
   const [inputEdit, setInputEdit] = useState(false);
+  const apiURL = "http://localhost:5000";
   const {
     data: todos,
     isLoading,
     refetch,
-  } = useQuery("todos", () =>
-    fetch(`http://localhost:5000/get`).then((res) => res.json())
-  );
+  } = useQuery("todos", () => fetch(`${apiURL}/get`).then((res) => res.json()));
 
   if (isLoading) {
     return "Data loading";
   }
 
+  // Post data
   const handleSubmit = (e) => {
     e.preventDefault();
     const taskName = e.target.taskName.value;
@@ -24,9 +24,8 @@ function App() {
       task: taskName,
       priority: taskPriroity,
     };
-
     // Send to DB
-    fetch("http://localhost:5000/post", {
+    fetch(`${apiURL}/post`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -35,7 +34,8 @@ function App() {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.insertedId) {
+        console.log(data);
+        if (data.insertId) {
           alert(`Add todo`);
         } else {
           alert(`Not add`);
@@ -46,6 +46,21 @@ function App() {
     e.target.taskName.value = "";
     e.target.taskPriroity.value = "";
     refetch();
+  };
+
+  // Delete data
+  const handleDelete = (id) => {
+    fetch(`${apiURL}/delete/${id}`, {
+      method: "DELETE",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data.protocol41) {
+          alert(`Todo is deleted.`);
+          refetch();
+        }
+      });
   };
 
   const handleEdit = (e) => {
@@ -136,7 +151,10 @@ function App() {
                     >
                       Edit
                     </button>
-                    <button className="btn btn-primary px-4 py-1 rounded bg-red-600">
+                    <button
+                      onClick={() => handleDelete(todo.id)}
+                      className="btn btn-primary px-4 py-1 rounded bg-red-600"
+                    >
                       Delete
                     </button>
                   </div>

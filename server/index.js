@@ -30,8 +30,8 @@ db.connect(function (error) {
 
 // post api
 app.post("/post", (req, res) => {
-  const todo = "test todo 4";
-  const priority = "high";
+  const todo = req.body.task;
+  const priority = req.body.priority;
 
   db.query(
     "INSERT INTO `todo`(`task`, `priority`) VALUES (?,?)",
@@ -40,7 +40,7 @@ app.post("/post", (req, res) => {
       if (err) {
         console.log(err);
       } else {
-        res.send("result");
+        res.send(result);
       }
     }
   );

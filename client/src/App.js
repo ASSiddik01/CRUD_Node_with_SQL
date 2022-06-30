@@ -20,10 +20,32 @@ function App() {
     e.preventDefault();
     const taskName = e.target.taskName.value;
     const taskPriroity = e.target.taskPriroity.value;
-    console.log(taskName, taskPriroity);
+    const todo = {
+      task: taskName,
+      priority: taskPriroity,
+    };
 
+    // Send to DB
+    fetch("http://localhost:5000/post", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(todo),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.insertedId) {
+          alert(`Add todo`);
+        } else {
+          alert(`Not add`);
+        }
+      });
+
+    // Clear
     e.target.taskName.value = "";
     e.target.taskPriroity.value = "";
+    refetch();
   };
 
   const handleEdit = (e) => {
